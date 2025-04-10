@@ -1,4 +1,4 @@
-package book.bookspring.global.config;
+package book.bookspring.global.config.p6spy;
 
 
 import com.p6spy.engine.logging.Category;
