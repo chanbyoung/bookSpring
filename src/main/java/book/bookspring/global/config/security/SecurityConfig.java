@@ -4,6 +4,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 import book.bookspring.global.config.redis.dao.RedisRepository;
 import book.bookspring.global.config.security.filter.JwtFilter;
+import book.bookspring.global.config.security.handler.CustomAccessDeniedHandler;
+import book.bookspring.global.config.security.handler.CustomAuthenticationEntryPoint;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,18 +33,26 @@ public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final RedisRepository redisRepository;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .httpBasic(AbstractHttpConfigurer::disable) // HTTP Basic 인증을 비활성화 (JWT 방식을 사용하기 위해서)
+                .httpBasic(
+                        AbstractHttpConfigurer::disable) // HTTP Basic 인증을 비활성화 (JWT 방식을 사용하기 위해서)
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호를 비활성화 (JWT 인증은 세션이 아닌 토큰 기반이라 필요 없음)
-                .cors(cors -> cors.configurationSource(
-                        corsConfigurationSource())) // CORS 설정을 활성화하여 corsConfigurationSource()에서 상세 설정을 정의
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
-                        STATELESS)) // 세션 정책을 STATELESS로 설정하여 서버에서 세션을 생성하지 않음
-                .addFilterBefore(new JwtFilter(tokenProvider, redisRepository), UsernamePasswordAuthenticationFilter.class)
+                .cors(cors -> cors
+                        .configurationSource(corsConfigurationSource())) // CORS 설정을 활성화하여 corsConfigurationSource()에서 상세 설정을 정의
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(STATELESS)) // 세션 정책을 STATELESS로 설정하여 서버에서 세션을 생성하지 않음
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                .addFilterBefore(new JwtFilter(tokenProvider, redisRepository),
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
