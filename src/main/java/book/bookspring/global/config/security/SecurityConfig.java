@@ -2,6 +2,8 @@ package book.bookspring.global.config.security;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import book.bookspring.global.config.redis.dao.RedisRepository;
+import book.bookspring.global.config.security.filter.JwtFilter;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,6 +29,10 @@ public class SecurityConfig {
     @Value("${host.name}")
     private String HOST_NAME;
 
+    private final TokenProvider tokenProvider;
+    private final RedisRepository redisRepository;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -35,6 +42,7 @@ public class SecurityConfig {
                         corsConfigurationSource())) // CORS 설정을 활성화하여 corsConfigurationSource()에서 상세 설정을 정의
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(
                         STATELESS)) // 세션 정책을 STATELESS로 설정하여 서버에서 세션을 생성하지 않음
+                .addFilterBefore(new JwtFilter(tokenProvider, redisRepository), UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }

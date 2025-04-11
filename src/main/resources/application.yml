@@ -31,3 +31,6 @@ decorator:
 
 host:
   name: "http://localhost:3000"
+
+jwt:
+  secret: ${JWT_SECRET}
