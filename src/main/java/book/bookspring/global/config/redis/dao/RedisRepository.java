@@ -24,11 +24,11 @@ public class RedisRepository {
     public void storeRefreshToken(RefreshTokenInfoDto tokenData) {
         try {
             // 기존 데이터 삭제
-            redisTemplate.delete(tokenData.email());
+            redisTemplate.delete(tokenData.id());
 
             HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
-            hashOperations.putAll(tokenData.email(), createTokenDataMap(tokenData));
-            redisTemplate.expire(tokenData.email(), 7, TimeUnit.DAYS);
+            hashOperations.putAll(tokenData.id(), createTokenDataMap(tokenData));
+            redisTemplate.expire(tokenData.id(), 7, TimeUnit.DAYS);
         } catch (Exception e) {
             log.warn("Redis에 Refresh Token 저장 실패: {}", e.getMessage());
         }
@@ -51,10 +51,10 @@ public class RedisRepository {
     /**
      * 로그아웃 시 액세스 토큰과 리프레시 토큰을 블랙리스트에 추가
      */
-    public void logoutTokens(String jwtToken, long accessTokenExpiration, String userId) {
+    public void logoutTokens(String accessToken, long accessTokenExpiration, String userId) {
         try {
             redisTemplate.opsForValue().set(
-                    jwtToken,
+                    accessToken,
                     "blacklisted",
                     accessTokenExpiration,
                     TimeUnit.MILLISECONDS);

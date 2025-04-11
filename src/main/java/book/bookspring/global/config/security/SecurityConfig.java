@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -45,9 +47,16 @@ public class SecurityConfig {
                         AbstractHttpConfigurer::disable) // HTTP Basic 인증을 비활성화 (JWT 방식을 사용하기 위해서)
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호를 비활성화 (JWT 인증은 세션이 아닌 토큰 기반이라 필요 없음)
                 .cors(cors -> cors
-                        .configurationSource(corsConfigurationSource())) // CORS 설정을 활성화하여 corsConfigurationSource()에서 상세 설정을 정의
+                        .configurationSource(
+                                corsConfigurationSource())) // CORS 설정을 활성화하여 corsConfigurationSource()에서 상세 설정을 정의
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(STATELESS)) // 세션 정책을 STATELESS로 설정하여 서버에서 세션을 생성하지 않음
+                        .sessionCreationPolicy(
+                                STATELESS)) // 세션 정책을 STATELESS로 설정하여 서버에서 세션을 생성하지 않음
+                .authorizeHttpRequests(requestMatcherRegistry ->
+                        requestMatcherRegistry.requestMatchers(
+                                        "/api/auth/**"
+                                ).permitAll()
+                                .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
@@ -73,6 +82,12 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        return authenticationManagerBuilder.build();
     }
 
 }

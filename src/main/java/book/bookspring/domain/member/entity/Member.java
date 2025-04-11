@@ -2,6 +2,7 @@ package book.bookspring.domain.member.entity;
 
 import static jakarta.persistence.EnumType.STRING;
 
+import book.bookspring.global.auth.dto.req.SignUpDto;
 import book.bookspring.global.config.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,5 +50,14 @@ public class Member extends BaseEntity {
         this.password = password;
         this.role = role;
         this.profile_image = profile_image;
+    }
+
+    public static Member of(SignUpDto signUpDto, String encodedPassword) {
+        return Member.builder()
+                .email(signUpDto.email())
+                .password(encodedPassword)
+                .role(Role.USER)
+                .profile_image(signUpDto.profile_image())
+                .build();
     }
 }
