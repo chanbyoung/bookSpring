@@ -58,4 +58,12 @@ public class AuthService {
         // 남은 유효기간동안 토큰 블랙리스트 처리
         redisRepository.logoutTokens(accessToken, expiration, memberId);
     }
+
+    public void delete(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new BusinessException(memberId, "memberId", ErrorCode.MEMBER_NOT_FOUND)
+        );
+
+        member.markAsDeleted();
+    }
 }

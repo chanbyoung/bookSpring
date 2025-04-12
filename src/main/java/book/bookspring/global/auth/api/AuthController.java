@@ -4,10 +4,12 @@ import book.bookspring.global.auth.application.AuthService;
 import book.bookspring.global.auth.dto.JwtToken;
 import book.bookspring.global.auth.dto.req.SignInDto;
 import book.bookspring.global.auth.dto.req.SignUpDto;
+import book.bookspring.global.config.security.annotation.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,12 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@Valid @RequestBody JwtToken jwtToken) {
         authService.logout(jwtToken.accessToken());
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteAccount(@LoginUser Long memberId) {
+        authService.delete(memberId);
         return ResponseEntity.ok().build();
     }
 }

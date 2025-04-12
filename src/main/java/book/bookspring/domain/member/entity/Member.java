@@ -43,6 +43,8 @@ public class Member extends BaseEntity {
     @Column(name = "profile_image", length = MAX_VALUE)
     private String profile_image;
 
+
+
     @Builder
     public Member(Long id, String email, String password, Role role, String profile_image) {
         this.id = id;
