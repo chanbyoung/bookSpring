@@ -59,11 +59,15 @@ public class AuthService {
         redisRepository.logoutTokens(accessToken, expiration, memberId);
     }
 
+    @Transactional
     public void delete(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessException(memberId, "memberId", ErrorCode.MEMBER_NOT_FOUND)
         );
-
         member.markAsDeleted();
+    }
+
+    public JwtToken refreshAccessToken(JwtToken jwtToken) {
+        return tokenProvider.refreshAccessToken(jwtToken.refreshToken());
     }
 }

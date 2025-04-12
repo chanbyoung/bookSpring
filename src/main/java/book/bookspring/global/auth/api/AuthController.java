@@ -2,6 +2,7 @@ package book.bookspring.global.auth.api;
 
 import book.bookspring.global.auth.application.AuthService;
 import book.bookspring.global.auth.dto.JwtToken;
+import book.bookspring.global.auth.dto.RefreshTokenInfoDto;
 import book.bookspring.global.auth.dto.req.SignInDto;
 import book.bookspring.global.auth.dto.req.SignUpDto;
 import book.bookspring.global.config.security.annotation.LoginUser;
@@ -45,5 +46,13 @@ public class AuthController {
     public ResponseEntity<Void> deleteAccount(@LoginUser Long memberId) {
         authService.delete(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtToken> refreshAccessToken(
+            @RequestBody JwtToken jwtToken
+    ) {
+        JwtToken newAccessToken = authService.refreshAccessToken(jwtToken);
+        return ResponseEntity.ok(newAccessToken);
     }
 }
