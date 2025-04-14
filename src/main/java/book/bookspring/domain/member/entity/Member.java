@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(name = "email", nullable = false, length = ACCOUNT_LENGTH)
+    @Email
     private String email;
 
     @Column(name = "password", nullable = false, length = ACCOUNT_LENGTH)
