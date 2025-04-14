@@ -64,6 +64,12 @@ public class AuthService {
         Member member = memberRepository.findById(memberId).orElseThrow(
                 () -> new BusinessException(memberId, "memberId", ErrorCode.MEMBER_NOT_FOUND)
         );
+
+        if (member.isDelete()) {
+            throw new BusinessException(true, "isDeleted",
+                    ErrorCode.MEMBER_ALREADY_DELETE);
+        }
+
         member.markAsDeleted();
     }
 
