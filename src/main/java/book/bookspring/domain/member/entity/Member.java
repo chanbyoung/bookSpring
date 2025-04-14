@@ -35,7 +35,7 @@ public class Member extends BaseEntity {
     @Email
     private String email;
 
-    @Column(name = "password", nullable = false, length = ACCOUNT_LENGTH)
+    @Column(name = "password", nullable = false, length = MAX_VALUE)
     private String password;
 
     @Enumerated(STRING)
