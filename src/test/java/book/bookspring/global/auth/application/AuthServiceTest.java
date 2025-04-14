@@ -1,6 +1,7 @@
 package book.bookspring.global.auth.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
@@ -12,6 +13,8 @@ import book.bookspring.global.auth.dto.req.SignInDto;
 import book.bookspring.global.auth.dto.req.SignUpDto;
 import book.bookspring.global.config.redis.dao.RedisRepository;
 import book.bookspring.global.config.security.TokenProvider;
+import book.bookspring.global.exception.custom.BusinessException;
+import book.bookspring.global.exception.enums.ErrorCode;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,6 +60,19 @@ class AuthServiceTest {
         //then
         verify(memberRepository, times(1)).save(any(Member.class));
         verify(passwordEncoder).encode(signUpDto.password());
+    }
+
+    @DisplayName("이메일이 이미 가입 이력이 있어 회원가입에 실패합니다.")
+    @Test
+    void shouldThrowException_whenEmailAlreadyExists() {
+        // given
+        SignUpDto signUpDto = new SignUpDto(TEST_EMAIL, TEST_PASSWORD, null);
+        when(memberRepository.existsByEmail(signUpDto.email())).thenReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> authService.signUp(signUpDto))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining(ErrorCode.MEMBER_ALREADY_EXIST.getMessage());
     }
 
     @DisplayName("정상적으로 로그인에 성공하면 토큰을 반환한다")
@@ -133,5 +149,20 @@ class AuthServiceTest {
         // then
         assertThat(newJwtToken.accessToken()).isEqualTo(newToken);
         verify(tokenProvider, times(1)).refreshAccessToken(jwtToken.refreshToken());
+    }
+
+    @DisplayName("이미 삭제 처리된 회원을 삭제하면 오류가 발생한다.")
+    @Test
+    void shouldThrowException_whenDeletingAlreadyDeletedMember(){
+        // given
+        Long memberId = 1L;
+        Member mockMember = mock(Member.class);
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(mockMember));
+        when(mockMember.isDelete()).thenReturn(true);
+
+        // when && then
+        assertThatThrownBy(() -> authService.delete(memberId))
+                .isInstanceOf(BusinessException.class)
+                .hasMessageContaining(ErrorCode.MEMBER_ALREADY_DELETE.getMessage());
     }
 }
