@@ -1,5 +1,6 @@
 package book.bookspring.domain.university.entity;
 
+import book.bookspring.domain.university.dto.UniversityRawDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,4 +41,15 @@ public class University {
     private String region;
 
 
+    public static University from(UniversityRawDto rawDto) {
+        String college = "단과대구분없음".equals(rawDto.collegeName())
+                ? null : rawDto.collegeName();
+
+        return University.builder()
+                .universityName(rawDto.universityName())
+                .collegeName(college)
+                .major(rawDto.major())
+                .region(rawDto.region())
+                .build();
+    }
 }
