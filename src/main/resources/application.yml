@@ -18,6 +18,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 100       # BATCH_SIZE 와 동일하게
+        order_inserts: true
+        order_updates: true
   data:
     redis:
       host: localhost
