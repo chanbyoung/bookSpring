@@ -2,7 +2,6 @@ package book.bookspring.global.auth.api;
 
 import book.bookspring.global.auth.application.AuthService;
 import book.bookspring.global.auth.dto.JwtToken;
-import book.bookspring.global.auth.dto.RefreshTokenInfoDto;
 import book.bookspring.global.auth.dto.req.SignInDto;
 import book.bookspring.global.auth.dto.req.SignUpDto;
 import book.bookspring.global.config.security.annotation.LoginUser;
