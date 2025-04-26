@@ -40,6 +40,10 @@ public class University {
     @Column(name = "region")
     private String region;
 
+    // 본분교
+    @Column(name = "campus_type")
+    private String campusType;
+
 
     public static University from(UniversityRawDto rawDto) {
         String college = "단과대구분없음".equals(rawDto.collegeName())
@@ -50,6 +54,7 @@ public class University {
                 .collegeName(college)
                 .major(rawDto.major())
                 .region(rawDto.region())
+                .campusType(rawDto.campusType())
                 .build();
     }
 }

@@ -16,5 +16,7 @@ public record UniversityRawDto(
         @JsonProperty("학부_과(전공)명")
         String major,
         @JsonProperty("지역")
-        String region
+        String region,
+        @JsonProperty("본분교명")
+        String campusType
 ) {}
