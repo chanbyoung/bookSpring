@@ -36,7 +36,6 @@ public class AuthService {
             throw new BusinessException(signUpDto.email(), "email", ErrorCode.MEMBER_ALREADY_EXIST);
         }
         String encodePassword = passwordEncoder.encode(signUpDto.password());
-        // TODO 프로필 이미지 처리
         memberRepository.save(Member.of(signUpDto, encodePassword));
     }
 

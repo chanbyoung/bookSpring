@@ -26,7 +26,10 @@ public enum ErrorCode {
     MEMBER_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "이미 해당 이메일로 가입한 이력이 있습니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원이 존재하지 않습니다."),
     MEMBER_ALREADY_DELETE(HttpStatus.BAD_REQUEST, "이미 삭제처리된 회원입니다."),
-    MEMBER_FILE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 파일 형식입니다.");
+    MEMBER_FILE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 파일 형식입니다."),
+
+    // University
+    University_NOT_FOUND(HttpStatus.NOT_FOUND, "대학교 정보가 존재하지않습니다.");
 
     //오류 상태코드
     private final HttpStatus httpStatus;

@@ -1,7 +1,11 @@
 package book.bookspring.domain.university.applicaton;
 
+import book.bookspring.domain.member.dto.OnboardingReqDto;
 import book.bookspring.domain.university.dao.UniversityRepository;
 import book.bookspring.domain.university.dto.UnivAutocompleteRepDto;
+import book.bookspring.domain.university.entity.University;
+import book.bookspring.global.exception.custom.BusinessException;
+import book.bookspring.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +47,14 @@ public class UniversityService {
                         .stream()
                         .toList()
         );
+    }
+
+
+    public University loadUniversity(OnboardingReqDto onboardingReqDto) {
+        return universityRepository.findUniversityByOnboardingInfo(
+                        onboardingReqDto.universityName(), onboardingReqDto.campus(),
+                        onboardingReqDto.major())
+                .orElseThrow(() -> new BusinessException(
+                        onboardingReqDto, "onboardingReqDto", ErrorCode.University_NOT_FOUND));
     }
 }

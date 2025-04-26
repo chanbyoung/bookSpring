@@ -23,6 +23,7 @@ public class MemberController {
             @RequestPart(name = "data")OnboardingReqDto onboardingReqDto
     ) {
         memberService.completeOnboarding(memberId, profileImage, onboardingReqDto);
+        return ResponseEntity.ok().build();
     }
 
 }

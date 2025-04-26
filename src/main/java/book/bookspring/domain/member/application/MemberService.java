@@ -4,6 +4,7 @@ import book.bookspring.domain.member.dao.MemberRepository;
 import book.bookspring.domain.member.dto.OnboardingReqDto;
 import book.bookspring.domain.member.entity.Member;
 import book.bookspring.domain.university.applicaton.UniversityService;
+import book.bookspring.domain.university.entity.University;
 import book.bookspring.global.exception.custom.BusinessException;
 import book.bookspring.global.exception.enums.ErrorCode;
 import book.bookspring.global.utils.file.FileService;
@@ -14,12 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
     private final FileService fileService;
     private final UniversityService universityService;
 
+    @Transactional
     public void completeOnboarding(Long memberId, MultipartFile profileImage,
             OnboardingReqDto onboardingReqDto) {
         Member member = memberRepository.findMemberById(memberId).orElseThrow(
@@ -30,6 +33,9 @@ public class MemberService {
             handleProfileImageUpdate(member, profileImage);
         }
 
+        University university = universityService.loadUniversity(onboardingReqDto);
+
+        member.updateUniversity(university);
     }
 
     /**
