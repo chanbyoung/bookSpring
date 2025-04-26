@@ -67,4 +67,15 @@ public class FileService {
                 fileName, "fileName"
         );
     }
+
+    /**
+     * full-path 형태(imagePath)로 넘어온 경우, 내부에서 파일명만 추출해 삭제.
+     */
+    public void deleteProfileImageByPath(String imagePath) {
+        if (imagePath == null || imagePath.isBlank()) return;
+        String fileName = Paths.get(imagePath)
+                .getFileName()
+                .toString();
+        deleteProfileImage(fileName);
+    }
 }
