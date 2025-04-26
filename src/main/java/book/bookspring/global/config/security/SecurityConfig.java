@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requestMatcherRegistry ->
                         requestMatcherRegistry.requestMatchers(
                                         "/api/auth/**",
-                                        "/api/university/batch" //TODO 관리자만 허용
+                                        "/api/university/**" //TODO 관리자만 허용
                                 ).permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
