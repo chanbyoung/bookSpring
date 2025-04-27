@@ -33,9 +33,10 @@ public class MemberService {
             handleProfileImageUpdate(member, profileImage);
         }
 
-        University university = universityService.loadUniversity(onboardingReqDto);
-
-        member.updateUniversity(university);
+        if (onboardingReqDto != null) {
+            University university = universityService.loadUniversity(onboardingReqDto);
+            member.updateUniversity(university);
+        }
     }
 
     /**
