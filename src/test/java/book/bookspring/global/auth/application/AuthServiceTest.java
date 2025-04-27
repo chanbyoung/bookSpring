@@ -50,7 +50,7 @@ class AuthServiceTest {
     @Test
     void signUp() {
         // given
-        SignUpDto signUpDto = new SignUpDto(TEST_EMAIL, TEST_PASSWORD, null);
+        SignUpDto signUpDto = new SignUpDto(TEST_EMAIL, TEST_PASSWORD);
         when(memberRepository.existsByEmail(signUpDto.email())).thenReturn(false);
         when(passwordEncoder.encode(signUpDto.password())).thenReturn("encodedPassword");
 
@@ -66,7 +66,7 @@ class AuthServiceTest {
     @Test
     void shouldThrowException_whenEmailAlreadyExists() {
         // given
-        SignUpDto signUpDto = new SignUpDto(TEST_EMAIL, TEST_PASSWORD, null);
+        SignUpDto signUpDto = new SignUpDto(TEST_EMAIL, TEST_PASSWORD);
         when(memberRepository.existsByEmail(signUpDto.email())).thenReturn(true);
 
         // when & then

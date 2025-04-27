@@ -18,6 +18,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 100       # BATCH_SIZE 와 동일하게
+        order_inserts: true
+        order_updates: true
   data:
     redis:
       host: localhost
@@ -34,3 +40,12 @@ host:
 
 jwt:
   secret: ${JWT_SECRET}
+
+file:
+  dir: ${FILE_DIR}
+
+api:
+  university:
+    url: https://api.odcloud.kr/api/15014632/v1/uddi:6939f45b-1283-4462-b394-820c26e1445d
+  service:
+    key: ${SERVICE_KEY}

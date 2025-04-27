@@ -54,7 +54,8 @@ public class SecurityConfig {
                                 STATELESS)) // 세션 정책을 STATELESS로 설정하여 서버에서 세션을 생성하지 않음
                 .authorizeHttpRequests(requestMatcherRegistry ->
                         requestMatcherRegistry.requestMatchers(
-                                        "/api/auth/**"
+                                        "/api/auth/**",
+                                        "/api/university/**" //TODO 관리자만 허용
                                 ).permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e

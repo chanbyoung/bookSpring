@@ -12,9 +12,8 @@ public record SignUpDto(
 
         @NotBlank
         @Size(max = 50)
-        String password,
+        String password
 
-        String profile_image
 ) {
 
 }
