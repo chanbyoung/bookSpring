@@ -27,13 +27,9 @@ public class UniversityService {
                         .toList());
     }
 
-    public UnivAutocompleteRepDto autocompleteCampus(String univName, String campusName,
-            Pageable pageable) {
+    public UnivAutocompleteRepDto autocompleteCampus(String univName) {
         return UnivAutocompleteRepDto.of(
-                universityRepository
-                        .searchCampusesByUniversity(univName, campusName, pageable)
-                        .stream()
-                        .toList()
+                universityRepository.findCampusesByUniversity(univName)
         );
     }
 

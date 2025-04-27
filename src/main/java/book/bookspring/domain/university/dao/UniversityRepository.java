@@ -1,6 +1,7 @@
 package book.bookspring.domain.university.dao;
 
 import book.bookspring.domain.university.entity.University;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +23,8 @@ public interface UniversityRepository extends JpaRepository<University, Long> {
            SELECT DISTINCT u.campusType
            FROM University u
            WHERE u.universityName = :univName
-             AND u.campusType LIKE %:q%
            """)
-    Page<String> searchCampusesByUniversity(@Param("univName") String univName, @Param("q") String campusName, Pageable pageable);
+    List<String> findCampusesByUniversity(@Param("univName") String univName);
 
     @Query("""
            SELECT DISTINCT u.major

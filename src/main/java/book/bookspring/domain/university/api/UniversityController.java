@@ -3,10 +3,8 @@ package book.bookspring.domain.university.api;
 import book.bookspring.domain.university.applicaton.UniversityApiClient;
 import book.bookspring.domain.university.applicaton.UniversityService;
 import book.bookspring.domain.university.dto.UnivAutocompleteRepDto;
-import book.bookspring.domain.university.entity.University;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,13 +46,11 @@ public class UniversityController {
         return universityService.autocompleteUniversities(univName, pageable);
     }
 
-    @GetMapping("/autocomplete/campus")
-    public UnivAutocompleteRepDto searchCampuses(
-            @RequestParam String univName,
-            @RequestParam String campusName,
-            Pageable pageable
+    @GetMapping("/search/campus")
+    public UnivAutocompleteRepDto findCampusesByUniversity(
+            @RequestParam String univName
     ) {
-        return universityService.autocompleteCampus(univName, campusName, pageable);
+        return universityService.autocompleteCampus(univName);
     }
 
     @GetMapping("/autocomplete/major")
